@@ -16,9 +16,7 @@ namespace Exercise7
         {
             driver = new ChromeDriver();
             wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
-            driver.Url = "http://localhost/litecart/admin/";
-            driver.Manage().Window.Maximize();            
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);                        
         }
 
         public bool IsElementPresent(By locator)
