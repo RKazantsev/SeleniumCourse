@@ -3,14 +3,10 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.UI;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Exercise7
 {
-    class TestBase
+    public class TestBase
     {
         protected IWebDriver driver;
         protected WebDriverWait wait;
@@ -19,11 +15,10 @@ namespace Exercise7
         public void Setup()
         {
             driver = new ChromeDriver();
-            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            //driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            driver.Url = "https://www.google.com.ua/";
-            driver.Manage().Window.Maximize();
-
+            wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+            driver.Url = "http://localhost/litecart/admin/";
+            driver.Manage().Window.Maximize();            
         }
 
         public bool IsElementPresent(By locator)
@@ -31,10 +26,9 @@ namespace Exercise7
             try
             {
                 wait.Until(d => d.FindElement(locator));
-                //driver.FindElement(locator);
                 return true;
             }
-            catch (NoSuchElementException)
+            catch (TimeoutException)
             {
                 return false;
             }
