@@ -8,12 +8,20 @@ namespace Lecture5
     public class Exercise9 : TestBase
     {
         [Test]
-        public void Exercise9Test()
+        public void Exercise9Test1()
         {
             Init();
             Login();
             NavigateToCountries();
-            VerifyCountriesIsSorted();
+            VerifyCountriesIsSorted();            
+        }
+
+        [Test]
+        public void Exercise9Test2()
+        {
+            Init();
+            Login();
+            NavigateToCountries();
             VerifyZonesIsSorted();
         }
 
