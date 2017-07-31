@@ -25,6 +25,15 @@ namespace Lecture5
             VerifyZonesIsSorted();
         }
 
+        [Test]
+        public void Exercise9Test3()
+        {
+            Init();
+            Login();
+            NavigateToGeoZones();
+            VerifyGeoZonesIsSorted();
+        }
+
         public void Init()
         {
             driver.Url = " http://localhost/litecart/admin/";
@@ -43,6 +52,18 @@ namespace Lecture5
         {
             driver.FindElement(By.CssSelector("ul#box-apps-menu > li#app-:nth-child(3) span.name")).Click();
             wait.Until(ExpectedConditions.TitleIs("Countries | My Store"));
+        }
+
+        public void NavigateToGeoZones()
+        {
+            driver.FindElement(By.CssSelector("ul#box-apps-menu > li#app-:nth-child(6) span.name")).Click();
+            wait.Until(ExpectedConditions.TitleIs("Geo Zones | My Store"));
+        }
+
+        public void NavigateToEditGeoZones(int index)
+        {
+            driver.FindElement(By.CssSelector("table.dataTable tbody > tr.row:nth-child(" + (index + 1) + ") > td:nth-child(3) > a")).Click();
+            wait.Until(ExpectedConditions.TitleIs("Edit Geo Zone | My Store"));
         }
 
         public void VerifyCountriesIsSorted()
@@ -74,10 +95,30 @@ namespace Lecture5
                         string zoneCurrent = driver.FindElement(By.CssSelector("table#table-zones tbody > tr.row:nth-child(" + indexZone + ") > td:nth-child(3)")).Text;
                         string zoneNext = driver.FindElement(By.CssSelector("table.dataTable tbody > tr.row:nth-child(" + (indexZone + 1) + ") > td:nth-child(3)")).Text;
                         Assert.LessOrEqual(zoneCurrent, zoneNext);
-                    }                    
+                    }
                     driver.Navigate().Back();
-                }                
+                }
             }
         }
+
+        public void VerifyGeoZonesIsSorted()
+        {
+            int countriesCount = driver.FindElements(By.CssSelector("table.dataTable tbody > tr.row")).Count;
+            for (int index = 1; index <= countriesCount; index++)
+            {
+                NavigateToEditGeoZones(index);
+
+                int geoZonesCount = driver.FindElements(By.CssSelector("table#table-zones > tbody > tr > td:nth-child(3) > select")).Count;
+                for (int indexZone = 2; indexZone <= geoZonesCount; indexZone++)
+                {
+                    string zoneCurrent = driver.FindElement(By.CssSelector("table#table-zones tbody > tr:nth-child(" + indexZone + ") > td:nth-child(3) > select > option[selected = 'selected']")).Text;
+                    string zoneNext = driver.FindElement(By.CssSelector("table#table-zones tbody > tr:nth-child(" + (indexZone + 1) + ") > td:nth-child(3) > select > option[selected = 'selected']")).Text;
+                    Assert.LessOrEqual(zoneCurrent, zoneNext);
+                }                
+                NavigateToGeoZones();
+            }
+        }
+
+
     }
 }
