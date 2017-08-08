@@ -18,7 +18,7 @@
 
         public GeneralTabProduct(string status, string name, string code, string categories,
                            string defaultCategory, string genderProductGroup, string quantity, string quantityUnit,
-                           string deliveryStatus, string soldOutStatus, string productImageURL, string dateValidFrom, string dateValidTo)
+                           string deliveryStatus, string soldOutStatus, string imageProduct, string dateValidFrom, string dateValidTo)
         {
             this.status = status;
             this.name = name;
@@ -30,7 +30,7 @@
             this.quantityUnit = quantityUnit;
             this.deliveryStatus = deliveryStatus;
             this.soldOutStatus = soldOutStatus;
-            this.imageProduct = productImageURL;
+            this.imageProduct = imageProduct;
             this.dateValidFrom = dateValidFrom;
             this.dateValidTo = dateValidTo;
         }
@@ -145,7 +145,7 @@
                 soldOutStatus = value;
             }
         }
-        public string ProductImageURL
+        public string ImageProduct
         {
             get
             {

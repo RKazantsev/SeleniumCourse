@@ -2,6 +2,7 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using System.IO;
+using System.Reflection;
 
 namespace Lecture6
 {
@@ -31,7 +32,6 @@ namespace Lecture6
             driver.FindElement(By.Name("login")).Click();
             wait.Until(ExpectedConditions.TitleIs("My Store"));
         }
-
         public void NavigateToAdminPage()
         {
             driver.Url = " http://localhost/litecart/admin/";
@@ -59,6 +59,7 @@ namespace Lecture6
         }
         public void FillGeneralTabForm()
         {
+            // Select Status
             if (product.generalTab.Status == "enabled")
             {
                 driver.FindElement(By.CssSelector("div#tab-general label > input[value = '1']")).Click();
@@ -66,10 +67,16 @@ namespace Lecture6
             {
                 driver.FindElement(By.CssSelector("div#tab-general label > input[value = '0']")).Click();
             }
+            
+            //Input Product Name
             driver.FindElement(By.CssSelector("div#tab-general span.input-wrapper > input")).Clear();
             driver.FindElement(By.CssSelector("div#tab-general span.input-wrapper > input")).SendKeys(product.generalTab.Name);
+
+            //Input Product Code
             driver.FindElement(By.CssSelector("div#tab-general input[name='code']")).Clear();
             driver.FindElement(By.CssSelector("div#tab-general input[name='code']")).SendKeys(product.generalTab.Code);
+
+            //Select Category
             switch (product.generalTab.Categories)
             {
                 case "Rubber Ducks":
@@ -81,6 +88,8 @@ namespace Lecture6
                     driver.FindElement(By.CssSelector("div#tab-general td > input[value='2']")).Click();
                     break;
             }
+           
+            //Select Gender Group
             switch (product.generalTab.Gender)
             {
                 case "Female":
@@ -93,6 +102,8 @@ namespace Lecture6
                     driver.FindElement(By.CssSelector("input[value='1-3']")).Click();
                     break;
             }
+            
+            //Quantity, Quantity Unit, Delivery Status, Sold Out Status
             driver.FindElement(By.CssSelector("input[name='quantity']")).Clear();
             driver.FindElement(By.CssSelector("input[name='quantity']")).SendKeys(product.generalTab.Quantity);
             SelectElement quantityUnitSelect = new SelectElement(driver.FindElement(By.CssSelector("select[name='quantity_unit_id']")));
@@ -102,10 +113,14 @@ namespace Lecture6
             SelectElement soldOutStatusSelect = new SelectElement(driver.FindElement(By.CssSelector("select[name='sold_out_status_id']")));
             soldOutStatusSelect.SelectByText(product.generalTab.SoldOutStatus);
 
-            // Change Path to Image file here.
-            driver.FindElement(By.CssSelector("input[name='new_images[]']")).SendKeys(Path.GetFullPath(@"C:\\Repos\\SeleniumCourse\\Lecture6\\Lecture6\\plush-duck.jpg"));
+            //Path to Image
+            string imagePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            imagePath = Path.GetFullPath(imagePath + "..\\..\\..\\" + product.generalTab.ImageProduct);
+            
+            //Upload Image
+            driver.FindElement(By.CssSelector("input[name='new_images[]']")).SendKeys(imagePath);           
 
-
+            //Date
             driver.FindElement(By.CssSelector("input[name='date_valid_from']")).SendKeys(product.generalTab.DateValidFrom);
             driver.FindElement(By.CssSelector("input[name='date_valid_to']")).SendKeys(product.generalTab.DateValidTo);
         }
