@@ -14,6 +14,7 @@ namespace Lecture6
         protected IWebDriver driver;
         protected WebDriverWait wait;
         protected AccountData account;
+        protected ProductData product;
         
         [SetUp]
         public void Setup()
@@ -30,6 +31,11 @@ namespace Lecture6
                                       "938 Temple Ave", "1050 Gladys Ave", "90804", "Long Beach",
                                       "United States", "California", "john.smith@mail.com", 
                                       "+15624349600", "password");
+
+            product = new ProductData("enabled", "Yellow Plush Duck", "pd001", "Subcategory", "DefaultCategory",
+                "Unisex", "15", "pcs", "3-5 days", "Temporary sold out", "plush-duck.jpg", "01-01-2017", "01-01-2022",
+                "ACME Corp.", "Supplier", "ABC", "Plush Duck", "Yellow Plush Duck", "Yellow Plush Duck", "Plush Duck",
+                "15", "US Dollars", "", "25", "20");
         }
 
         [TearDown]
