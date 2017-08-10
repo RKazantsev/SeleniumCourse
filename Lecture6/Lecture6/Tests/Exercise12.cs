@@ -114,12 +114,15 @@ namespace Lecture6
             soldOutStatusSelect.SelectByText(product.generalTab.SoldOutStatus);
 
             //Path to Image
-            string imagePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            imagePath = Path.GetFullPath(imagePath + "..\\..\\..\\" + product.generalTab.ImageProduct);
-            
-            //Upload Image
-            driver.FindElement(By.CssSelector("input[name='new_images[]']")).SendKeys(imagePath);           
+            //string imagePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
+            // Path to Image using NUnit
+            string imagePath = TestContext.CurrentContext.TestDirectory;
+            imagePath = Path.GetFullPath(imagePath + "..\\..\\..\\" + product.generalTab.ImageProduct);            
+
+            //Upload Image
+            driver.FindElement(By.CssSelector("input[name='new_images[]']")).SendKeys(imagePath);
+            
             //Date
             driver.FindElement(By.CssSelector("input[name='date_valid_from']")).SendKeys(product.generalTab.DateValidFrom);
             driver.FindElement(By.CssSelector("input[name='date_valid_to']")).SendKeys(product.generalTab.DateValidTo);
