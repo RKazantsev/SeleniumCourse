@@ -12,7 +12,7 @@ namespace Lecture10
     public class Exercise17
     {
         private EventFiringWebDriver driver;     
-        private WebDriverWait wait;        
+        private WebDriverWait wait;
 
         [SetUp]
         public void SetUp()
@@ -44,8 +44,7 @@ namespace Lecture10
             WaitPage("My Store");
             NavigateToCatalog();
             WaitPage("Catalog | My Store");           
-            ExpandFolders();
-            RunCatalog();
+            RunCatalog();            
         }
 
         public void NavigateToAdminPage()
@@ -63,49 +62,42 @@ namespace Lecture10
         {
             driver.FindElement(By.CssSelector("ul#box-apps-menu > li#app-:nth-child(2) a")).Click();          
         }
-        public void ExpandFolders()
+        public void RunCatalog()
         {
+            IList<IWebElement> rowItems = driver.FindElements(By.CssSelector("tr.row"));
             bool closeFolderIsPresent;
-            int index = 0;            
+            int rowIndex = 0;
+            int folderIndex = 0;
             do
-            {
-                IList<IWebElement> rowItems = driver.FindElements(By.CssSelector("tr.row"));
+            {                
                 closeFolderIsPresent = false;
-                index = 0;
                 do
-                {                                     
-                    if (rowItems[index].FindElements(By.CssSelector("i.fa-folder")).Count > 0)
+                {
+                    if (rowItems[rowIndex].FindElements(By.CssSelector("i.fa-folder")).Count > 0)
                     {
-                        rowItems[index].FindElement(By.CssSelector("td:nth-child(3) > a")).Click();                        
+                        rowItems[rowIndex].FindElement(By.CssSelector("td:nth-child(3) > a")).Click();
                         closeFolderIsPresent = true;
+                        rowIndex = folderIndex++;
                     }
-                    index++;
-                } while (!closeFolderIsPresent && (index < rowItems.Count));   
+                    else if (rowItems[rowIndex].FindElements(By.CssSelector("td:nth-child(3) > img")).Count > 0)
+                    {
+                        rowItems[rowIndex].FindElement(By.CssSelector("td:nth-child(3) > a")).Click();
+                        wait.Until(ExpectedConditions.TitleContains("Edit Product:"));
+                        GetBrowserLogs("Product page : ");
+                        //GetPerformanceLogs("Product page : ");
+
+                        driver.Navigate().Back();
+                        WaitPage("Catalog | My Store");
+
+                        GetBrowserLogs("Catalog page : ");
+                        //GetPerformanceLogs("Catalog page : ");                        
+                        rowIndex++;
+                    }
+                    else rowIndex++;
+                    rowItems = driver.FindElements(By.CssSelector("tr.row"));                    
+                } while (!closeFolderIsPresent && (rowIndex < rowItems.Count));   
             } while (closeFolderIsPresent);            
         }
-        public void RunCatalog()
-        {            
-            IList<IWebElement> rowItems = driver.FindElements(By.CssSelector("tr.row"));
-            for (int index = 2; index < rowItems.Count; index++)
-            {
-                if (rowItems[index].FindElements(By.CssSelector("td:nth-child(3) > img")).Count > 0)
-                {
-                    rowItems[index].FindElement(By.CssSelector("td:nth-child(3) > a")).Click();
-
-                    //GetBrowserLogs("Product page : ");
-                    //GetPerformanceLogs("Product page : ");
-
-                    driver.Navigate().Back();
-                    WaitPage("Catalog | My Store");
-
-                    GetBrowserLogs("Catalog page : ");
-                    //GetPerformanceLogs("Catalog page : ");
-
-                    rowItems = driver.FindElements(By.CssSelector("tr.row"));
-                }
-            }            
-        }
-
         public void GetBrowserLogs(string page)
         {
             foreach (LogEntry logEntry in driver.Manage().Logs.GetLog("browser"))
@@ -113,7 +105,6 @@ namespace Lecture10
                 Console.WriteLine(page + logEntry);
             }
         }
-
         public void GetPerformanceLogs(string page)
         {
             foreach (LogEntry logEntry in driver.Manage().Logs.GetLog("performance"))
@@ -121,9 +112,6 @@ namespace Lecture10
                 Console.WriteLine(page + logEntry);
             }
         }
-
-
-
         public void WaitPage(string page)
         {
             wait.Until(ExpectedConditions.TitleIs(page));
