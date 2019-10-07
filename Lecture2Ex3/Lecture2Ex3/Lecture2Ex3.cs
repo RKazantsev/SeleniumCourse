@@ -7,6 +7,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Interactions;
 
 namespace Lecture2Ex3
 {
@@ -41,6 +42,7 @@ namespace Lecture2Ex3
             options.UseLegacyImplementation = true;
             options.BrowserExecutableLocation = @"C:\Program Files\Mozilla Firefox\firefox.exe"; // ESR
             driver = new FirefoxDriver(options);
+            Actions action = new Actions(driver);
 
             // New Schema for FF Nightly & Developer Edition
             //FirefoxOptions options = new FirefoxOptions();
